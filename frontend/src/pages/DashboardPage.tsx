@@ -23,7 +23,8 @@ const DashboardPage = () => {
     breakModalOpen,
     setBreakModalOpen,
     emotionMonitoringEnabled,
-    setEmotionStatus
+    setEmotionStatus,
+    isOnBreak                 // 🔥 NEW
   } = useSession();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -66,7 +67,7 @@ const DashboardPage = () => {
 
     if (timerRef.current) clearInterval(timerRef.current);
 
-    if (sessionState === "active") {
+    if (sessionState === "active" && !isOnBreak) {
 
       timerRef.current = setInterval(() => {
 
@@ -88,7 +89,7 @@ const DashboardPage = () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
 
-  }, [sessionState]);
+  }, [sessionState, isOnBreak]);
 
   // -----------------------------
   // FSM SAFE COMPLETE
@@ -98,7 +99,6 @@ const DashboardPage = () => {
 
       const { data } = await sessionApi.completeTopic(true);
 
-      // 🚨 SESSION FINISHED
       if (data?.session_complete) {
         navigate("/summary");
         return;
@@ -169,6 +169,7 @@ const DashboardPage = () => {
   const handleEmotionCheck = useCallback(async (blob: Blob) => {
 
     if (!emotionMonitoringEnabled) return;
+    if (isOnBreak) return;               // 🔥 STOP DURING BREAK
     if (isDetectingRef.current) return;
 
     isDetectingRef.current = true;
@@ -196,7 +197,7 @@ const DashboardPage = () => {
       isDetectingRef.current = false;
     }
 
-  }, [emotionMonitoringEnabled, setEmotionStatus, setBreakModalOpen]);
+  }, [emotionMonitoringEnabled, isOnBreak, setEmotionStatus, setBreakModalOpen]);
 
   if (!currentTopic) {
     return (
@@ -211,10 +212,11 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative">
 
+      {/* 🔥 CAMERA NOW DISABLED DURING BREAK */}
       <WebcamCapture
         onCapture={handleEmotionCheck}
         intervalMs={3000}
-        active={sessionState === "active" && emotionMonitoringEnabled}
+        active={sessionState === "active" && emotionMonitoringEnabled && !isOnBreak}
       />
 
       <div className="w-full max-w-lg space-y-8">

@@ -11,11 +11,15 @@ interface SessionContextType {
   breakModalOpen: boolean;
   setBreakModalOpen: (open: boolean) => void;
 
-  // 🔥 NEW EMOTION STATES
+  // 🔥 EMOTION STATES
   emotionMonitoringEnabled: boolean;
   setEmotionMonitoringEnabled: (v: boolean) => void;
   emotionStatus: string;
   setEmotionStatus: (v: string) => void;
+
+  // 🔥🔥 BREAK MODE STATE (NEW)
+  isOnBreak: boolean;
+  setIsOnBreak: (v: boolean) => void;
 }
 
 const SessionContext = createContext<SessionContextType | null>(null);
@@ -27,9 +31,12 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [sessionState, setSessionState] = useState<SessionState>("idle");
   const [breakModalOpen, setBreakModalOpen] = useState(false);
 
-  // 🔥 NEW
+  // 🔥 EMOTION
   const [emotionMonitoringEnabled, setEmotionMonitoringEnabled] = useState(false);
   const [emotionStatus, setEmotionStatus] = useState("OFF");
+
+  // 🔥🔥 BREAK MODE
+  const [isOnBreak, setIsOnBreak] = useState(false);
 
   return (
     <SessionContext.Provider
@@ -46,7 +53,10 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
         emotionMonitoringEnabled,
         setEmotionMonitoringEnabled,
         emotionStatus,
-        setEmotionStatus
+        setEmotionStatus,
+
+        isOnBreak,
+        setIsOnBreak
       }}
     >
       {children}
