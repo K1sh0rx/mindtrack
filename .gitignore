@@ -1,0 +1,55 @@
+# ==============================
+# 🔹 Node (Frontend)
+# ==============================
+frontend/node_modules/
+node_modules/
+dist/
+build/
+.vite/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==============================
+# 🔹 Python (Backend)
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Remove pytest cache if created
+.pytest_cache/
+
+# Remove compiled C extensions
+*.so
+
+# ==============================
+# 🔹 Editor / OS Junk
+# ==============================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# ==============================
+# 🔹 IDE Files
+# ==============================
+.vscode/
+.idea/
+
+# ==============================
+# 🔹 Runtime / Temp Files
+# ==============================
+*.pid
+*.seed
+*.out
+
+venv
+# ==============================
+# 🚨 DO NOT IGNORE THESE
+# ==============================
+!.env
